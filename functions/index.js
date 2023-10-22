@@ -9,6 +9,7 @@
 
 const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
+const cors = require('cors')({origin: true});
 
 
 
@@ -100,6 +101,36 @@ const setVote = async () => {
 // setVote();
 
 let postId = "-NhJaIMv1hV_Mj6-o0Wx"
+const upVoteTrying = async(postID) => {
+    const db = getDatabase();
+    const ref = db.ref(`posts/Campus/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    // const upvotesRef = db.ref(`posts/Campus/News/${postID}/upvotes/`);
+    // upvotesRef.transaction((current_value) => {
+    // return parseInt((current_value || 0)) + 1; 
+    // });
+    console.log("Request Sent!");
+
+}
+
+exports.upVoteTrying = onRequest((request, response) => {
+  // const postId = request.query.postid;
+  // console.log("Post ID", postId)
+  // upVoteTrying(postId);
+  // cors(request, response, () => {});
+  response.status(200).json({ message: "Vote updated successfully!" });
+});
+
+
 const upVoteCampusNews = async(postID) => {
     const db = getDatabase();
     const ref = db.ref(`posts/Campus/`);
@@ -292,77 +323,80 @@ const upVotesIssuesCommunity2 = async(postID) => {
 }
 
 
-exports.updatevoteNews = onRequest((request, response) => {
+
+
+
+exports.upVoteCampusNews = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVoteCampusNews(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVoteCampusIssues = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVoteCampusIssues(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVoteCampusDirections = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVoteCampusDirections(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVoteCampusIssues = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVoteCampusIssues(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVoteDormsNews = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVoteDormsNews(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesDormIssues = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesDormIssues(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesDormIssues = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesDormIssues(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesFoodCommunity1 = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesFoodCommunity1(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesFoodCommunity2 = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesFoodCommunity2(postId);
-    response.send(` UpVote updated ${postId}`);
+    rresponse.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesInformationCommunity1 = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesInformationCommunity1(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesIssuesCommunity1 = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesIssuesCommunity1(postId);
-    response.send(` UpVote updated ${postId}`);
+    rresponse.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesIssuesCommunity2 = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesIssuesCommunity2(postId);
-    response.send(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 
 // upVoteCampusNews("-NhK4yVzzozaygBB5PXA");
@@ -422,5 +456,150 @@ ref.on('value', (snapshot) => {
 
 
 }
-
 // getVote2()
+
+// posts/login/users/ {uname: "", psw: ""}
+// posts/signup/users/ {uname: "", psw: ""}
+
+const login = async(username, password) => {
+  const db = getDatabase();
+    const ref = db.ref('posts/login/');
+    // const ref = db.ref(`login/`);
+    // const ref = db.ref(`login/users/`);
+
+    ref.on('value', (snapshot) => {
+      if (snapshot.exists()) {
+          // console.log(snapshot.val());
+          let access = checkUser(snapshot.val(), "u2@uname.edu", "passu2");
+          console.log("access", access);
+          if(access == true) return true;
+          else if(access == false) return false;
+          else return access;
+        } else {
+          console.log("Data doesn't exist at this location.");
+        }
+      console.log("login user list")
+    console.log(snapshot.key);
+  }, (errorObject) => {
+    console.log('The read failed: ' + errorObject.name);
+  }); 
+}
+
+const signup = async(username, password) => {
+  const db = getDatabase();
+    const ref = db.ref('posts/login/');
+    // const ref = db.ref(`login/`);
+    // const ref = db.ref(`login/users/`);
+
+    // console.log(username, password)
+
+  const usersRef = ref.child('users');
+  // const hopperRef = usersRef.child('gracehop');
+  const newUserRef = usersRef.push();
+
+  // Set the user data under the auto-generated ID
+  return newUserRef.set({
+    uname: username,
+    psw: password
+  });
+}
+
+// login();
+// signup("myuser33","mypass333");
+
+
+exports.login = onRequest((request, response) => {
+  // const request = request.query.
+  // category=Food&community=Issues&postid=-NhJidwG5QV0C8DmGr9B
+  const uname = request.query.uname;
+  const psw = request.query.psw;
+  
+  let isUser = login(uname, psw);
+  if(isUser) {
+    response.status(200).json(`SUCCESS, user details: ${uname}, ${psw}`);
+  }else if(!isUser) {
+    response.status(401).json(`INCORRECT PASSWORD, user details: ${uname}, ${psw}`);
+
+  }
+  else {
+    response.status(404).json(`NOT FOUND, user details: ${uname}, ${psw}`);
+  }
+
+  
+});
+exports.signup =  onRequest(async (request, response) => {
+  // const request = request.query.
+  // category=Food&community=Issues&postid=-NhJidwG5QV0C8DmGr9B
+  const uname = request.query.uname;
+  const psw = request.query.psw;
+
+  console.log("usersss", uname, psw)
+  
+  let isUser = await signup(uname, psw);
+  
+    response.status(200).json(`SUCCESS, user details: ${uname}, ${psw}`);
+
+
+  // 127.0.0.1:5001/msuduhackton/us-central1/signup?uname=SIGN@uname.edu&psw=2233
+});
+
+const setlogIn = async () => {
+  const db = getDatabase();
+  const ref = db.ref('posts/login/')
+
+  const usersRef = ref.child('users');
+  // const hopperRef = usersRef.child('gracehop');
+  const newUserRef = usersRef.push();
+
+  // Set the user data under the auto-generated ID
+  newUserRef.set({
+    uname: 'u1@uname.edu',
+    psw: 'passu1'
+  });
+}
+// setlogIn()
+
+const checkUser = (users, username, password) => {
+  console.log(users.users, username, password)
+  // users?.users?.map((user) => {
+  for(let userkey in users.users) {
+    // console.log(users.users[userkey])
+    console.log("first", userkey, typeof userkey)
+    if(users.users[userkey].uname == username){
+      if(users.users[userkey].psw == password) return true;
+      else return false;
+    }
+    
+  }
+  return "nouserfound";
+}
+
+// category/community/postid
+// Usable functions
+
+const upVote = async(category, community, postId) => {
+  const db = getDatabase();
+  const ref = db.ref(`posts/Campus/`);
+  // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+  let newVote = 1 + 1
+
+  console.log("upVote running")
+
+  const upvotesRef = db.ref(`posts/${category}/${community}/${postId}/upvotes/`);
+  upvotesRef.transaction((current_value) => {
+  return parseInt((current_value || 0)) + 1;
+  });
+
+}
+exports.upVote = onRequest((request, response) => {
+    // const request = request.query.
+    // category=Food&community=Issues&postid=-NhJidwG5QV0C8DmGr9B
+    const category = request.query.category;
+    const community = request.query.community;
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVote(category, community, postId);
+
+    response.status(200).json(` UpVote updated ${category}, ${community}, ${postId}`);
+  });
