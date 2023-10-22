@@ -1,0 +1,426 @@
+/**
+ * Import function triggers from their respective submodules:
+ *
+ * const {onCall} = require("firebase-functions/v2/https");
+ * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
+ *
+ * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ */
+
+const {onRequest} = require("firebase-functions/v2/https");
+const logger = require("firebase-functions/logger");
+
+
+
+// Create and deploy your first functions
+// https://firebase.google.com/docs/functions/get-started
+
+exports.helloWorld = onRequest((request, response) => {
+  logger.info("Hello logs!", {structuredData: true});
+  response.send("Hello from Firebase!");
+});
+
+
+const functions = require("firebase-functions");
+const admin = require('firebase-admin');
+admin.initializeApp({databaseURL: "https://msuduhackton.firebaseio.com"});
+admin.firestore().settings({ignoreUndefinedProperties:true});
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
+// const { initializeApp } = require('firebase/app');
+// const db3 = getDatabase();
+
+
+const createDataBase = () => {
+    const db = getFirestore();
+const ForumDatabse =  db.collection('ForumDatabse').doc("Catagory2").set({Food : "Object"})
+// const dataB =  db.collection('ForumDatabse').doc("Catagory").set({Ob : "Object"})
+
+}
+
+// createDataBase()
+
+
+// {
+//     issues:
+//         issues board (bugs, features), food(near me, reviews, rat issues), information  (news, events, clubs, directions)
+
+// }
+
+
+ exports.getData = onRequest( async (request, response) => {
+    // logger.info("Hello logs!", {structuredData: true});
+    const db = getFirestore();
+    // const ForumDatabse =  db.collection('ForumDatabse').doc("Catagory2").set({Food : "Object"})
+    const foodIssuesRef =  db.collection('posts').doc("Food")
+    // console.log(foodIssuesRef)
+
+    const doc = await foodIssuesRef.get();
+    if (!doc.exists) {
+        console.log('No such document!');
+        }    else {
+        console.log('Document data:', doc.data());
+            }
+    // foodIssuesRef.get()
+    // .then((array) => {
+    //   console.log("foodIssuesRef, True 3") 
+
+    //   // console.log(array)
+    //     array.docs.forEach((doc) => {
+    //       console.log("foodIssuesRef, True 4")
+    //         console.log(doc.data());
+           
+
+    //         console.log("_______________||||||___________")
+    //     });
+    // });
+
+    response.send("Hello from DataBase!");
+  });
+
+
+
+//   --------------------
+
+
+// Import Admin SDK
+const { getDatabase } = require('firebase-admin/database');
+
+// Get a database reference to our blog
+const setVote = async () => {
+    const db = getDatabase();
+    const ref = db.ref('posts/saving-data/fireblog')
+
+    const usersRef = ref.child('users');
+    const hopperRef = usersRef.child('gracehop');
+        hopperRef.update({
+     'nickname': 'Amazing Grace'
+    });
+}
+
+// setVote();
+
+let postId = "-NhJaIMv1hV_Mj6-o0Wx"
+const upVoteCampusNews = async(postID) => {
+    const db = getDatabase();
+    const ref = db.ref(`posts/Campus/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Campus/News/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVoteCampusDirections = async(postID) => {
+    const db = getDatabase();
+    const ref = db.ref(`posts/Campus/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Campus/Directions/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVoteCampusIssues = async(postID) => {
+    const db = getDatabase();
+    const ref = db.ref(`posts/Campus/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Campus/Issues/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVoteDormsNews = async(postID) => {
+    const db = getDatabase();
+    const ref = db.ref(`posts/Dorm/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Dorm/News/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVotesDormIssues = async(postID) => {
+    const db = getDatabase();
+    // const ref = db.ref(`posts/Dorms/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Dorms/Issues/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVotesFoodCommunity1 = async(postID) => {
+    const db = getDatabase();
+    // const ref = db.ref(`posts/Dorms/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Food/Community1/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVotesFoodCommunity2 = async(postID) => {
+    const db = getDatabase();
+    // const ref = db.ref(`posts/Dorms/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Food/Community2/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVotesInformationCommunity1 = async(postID) => {
+    const db = getDatabase();
+    // const ref = db.ref(`posts/Dorms/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Information/Community1/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVotesIssuesCommunity1 = async(postID) => {
+    const db = getDatabase();
+    // const ref = db.ref(`posts/Dorms/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Issues/Community1/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+const upVotesIssuesCommunity2 = async(postID) => {
+    const db = getDatabase();
+    // const ref = db.ref(`posts/Dorms/`);
+    // const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+
+    let newVote = 1 + 1
+
+    // const usersRef = ref.child('News'); 
+    // const hopperRef = usersRef.child(`${postID}`);
+    //     hopperRef.update({
+    //  'upvotes': '12' 
+    // });
+
+    const upvotesRef = db.ref(`posts/Issues/Community2/${postID}/upvotes/`);
+    upvotesRef.transaction((current_value) => {
+    return parseInt((current_value || 0)) + 1;
+    });
+
+}
+
+
+exports.updatevoteNews = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVoteCampusNews(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVoteCampusIssues = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVoteCampusIssues(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVoteCampusDirections = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVoteCampusDirections(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVoteCampusIssues = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVoteCampusIssues(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVoteDormsNews = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVoteDormsNews(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVotesDormIssues = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVotesDormIssues(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVotesDormIssues = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVotesDormIssues(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVotesFoodCommunity1 = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVotesFoodCommunity1(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVotesFoodCommunity2 = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVotesFoodCommunity2(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVotesInformationCommunity1 = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVotesInformationCommunity1(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVotesIssuesCommunity1 = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVotesIssuesCommunity1(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+exports.upVotesIssuesCommunity2 = onRequest((request, response) => {
+    const postId = request.query.postid;
+    console.log("Post ID", postId)
+    upVotesIssuesCommunity2(postId);
+    response.send(` UpVote updated ${postId}`);
+  });
+
+// upVoteCampusNews("-NhK4yVzzozaygBB5PXA");
+// upVoteCampusIssues("-NhJknkdf90VcQXj8X1a");
+// upVoteCampusDirections("-NhJj5nwxHqnJJ83XtSV");
+
+// upVotesDormIssues("-NhJijDfjO69QXS5XsqZ");
+
+// upVotesFoodCommunity2("-NhJBl4fOlWavxBFlWWk");
+
+// upVotesInformationCommunity1("-NhJ8SK0bhwhFxRCCbBE");
+
+// upVotesIssuesCommunity2("-NhJ7Xwconx1-90Kve7q");
+
+ 
+// '-NhJaIMv1hV_Mj6-o0Wx'
+const getVote = async(postId = '-NhJBl4fOlWavxBFlWWk') => {
+    // Get a database reference to our posts
+const db3 = getDatabase();
+const ref = db3.ref(`posts/Campus/News/-NhJaIMv1hV_Mj6-o0Wx/`);
+// const ref = db3.ref(`posts/Community2/${postId}/content`);
+
+// Attach an asynchronous callback to read the data at our posts reference
+ref.on('value', (snapshot) => {
+    if (snapshot.exists()) {
+        console.log(snapshot.key);
+      } else {
+        console.log("Data doesn't exist at this location.");
+      }
+    console.log("first")
+  console.log(snapshot.val());
+  console.log(snapshot.val().upvotes);
+}, (errorObject) => {
+  console.log('The read failed: ' + errorObject.name);
+}); 
+
+}
+// getVote();
+
+const getVote2 = async(postId) => {
+    // Get a database reference to our posts
+const db3 = getDatabase();
+const ref = db3.ref('posts/saving-data/fireblog');
+
+// Attach an asynchronous callback to read the data at our posts reference
+ref.on('value', (snapshot) => {
+    if (snapshot.exists()) {
+        console.log(snapshot.val());
+      } else {
+        console.log("Data doesn't exist at this location.");
+      }
+    console.log("first")
+  console.log(snapshot.val());
+}, (errorObject) => {
+  console.log('The read failed: ' + errorObject.name);
+}); 
+
+
+}
+
+// getVote2()
