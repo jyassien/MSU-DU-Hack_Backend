@@ -48,35 +48,6 @@ const ForumDatabse =  db.collection('ForumDatabse').doc("Catagory2").set({Food :
 // }
 
 
- exports.getData = onRequest( async (request, response) => {
-    // logger.info("Hello logs!", {structuredData: true});
-    const db = getFirestore();
-    // const ForumDatabse =  db.collection('ForumDatabse').doc("Catagory2").set({Food : "Object"})
-    const foodIssuesRef =  db.collection('posts').doc("Food")
-    // console.log(foodIssuesRef)
-
-    const doc = await foodIssuesRef.get();
-    if (!doc.exists) {
-        console.log('No such document!');
-        }    else {
-        console.log('Document data:', doc.data());
-            }
-    // foodIssuesRef.get()
-    // .then((array) => {
-    //   console.log("foodIssuesRef, True 3") 
-
-    //   // console.log(array)
-    //     array.docs.forEach((doc) => {
-    //       console.log("foodIssuesRef, True 4")
-    //         console.log(doc.data());
-           
-
-    //         console.log("_______________||||||___________")
-    //     });
-    // });
-
-    response.send("Hello from DataBase!");
-  });
 
 
 
@@ -378,7 +349,7 @@ exports.upVotesFoodCommunity2 = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesFoodCommunity2(postId);
-    rresponse.status(200).json(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesInformationCommunity1 = onRequest((request, response) => {
     const postId = request.query.postid;
@@ -390,7 +361,7 @@ exports.upVotesIssuesCommunity1 = onRequest((request, response) => {
     const postId = request.query.postid;
     console.log("Post ID", postId)
     upVotesIssuesCommunity1(postId);
-    rresponse.status(200).json(` UpVote updated ${postId}`);
+    response.status(200).json(` UpVote updated ${postId}`);
   });
 exports.upVotesIssuesCommunity2 = onRequest((request, response) => {
     const postId = request.query.postid;
@@ -485,94 +456,61 @@ const login = async(username, password) => {
   }); 
 }
 
-const signup = async(username, password) => {
-  const db = getDatabase();
-    const ref = db.ref('posts/login/');
-    // const ref = db.ref(`login/`);
-    // const ref = db.ref(`login/users/`);
 
-    // console.log(username, password)
+exports.getData = onRequest( async (request, response) => {
+  // logger.info("Hello logs!", {structuredData: true});
+  const db = getFirestore();
+  // const ForumDatabse =  db.collection('ForumDatabse').doc("Catagory2").set({Food : "Object"})
+  const foodIssuesRef =  db.collection('posts').doc("Food")
+  // console.log(foodIssuesRef)
 
-  const usersRef = ref.child('users');
-  // const hopperRef = usersRef.child('gracehop');
-  const newUserRef = usersRef.push();
+  const doc = await foodIssuesRef.get();
+  if (!doc.exists) {
+      console.log('No such document!');
+      }    else {
+      console.log('Document data:', doc.data());
+          }
+  // foodIssuesRef.get()
+  // .then((array) => {
+  //   console.log("foodIssuesRef, True 3") 
 
-  // Set the user data under the auto-generated ID
-  return newUserRef.set({
-    uname: username,
-    psw: password
-  });
-}
+  //   // console.log(array)
+  //     array.docs.forEach((doc) => {
+  //       console.log("foodIssuesRef, True 4")
+  //         console.log(doc.data());
+         
 
-// login();
-// signup("myuser33","mypass333");
+  //         console.log("_______________||||||___________")
+  //     });
+  // });
 
-
-exports.login = onRequest((request, response) => {
-  // const request = request.query.
-  // category=Food&community=Issues&postid=-NhJidwG5QV0C8DmGr9B
-  const uname = request.query.uname;
-  const psw = request.query.psw;
-  
-  let isUser = login(uname, psw);
-  if(isUser) {
-    response.status(200).json(`SUCCESS, user details: ${uname}, ${psw}`);
-  }else if(!isUser) {
-    response.status(401).json(`INCORRECT PASSWORD, user details: ${uname}, ${psw}`);
-
-  }
-  else {
-    response.status(404).json(`NOT FOUND, user details: ${uname}, ${psw}`);
-  }
-
-  
-});
-exports.signup =  onRequest(async (request, response) => {
-  // const request = request.query.
-  // category=Food&community=Issues&postid=-NhJidwG5QV0C8DmGr9B
-  const uname = request.query.uname;
-  const psw = request.query.psw;
-
-  console.log("usersss", uname, psw)
-  
-  let isUser = await signup(uname, psw);
-  
-    response.status(200).json(`SUCCESS, user details: ${uname}, ${psw}`);
-
-
-  // 127.0.0.1:5001/msuduhackton/us-central1/signup?uname=SIGN@uname.edu&psw=2233
+  response.send("Hello from DataBase!");
 });
 
-const setlogIn = async () => {
+const getData = async() => {
+  // logger.info("Hello logs!", {structuredData: true});
   const db = getDatabase();
-  const ref = db.ref('posts/login/')
+  const ref = db.ref(`posts/`);
+  // console.log(foodIssuesRef)
 
-  const usersRef = ref.child('users');
-  // const hopperRef = usersRef.child('gracehop');
-  const newUserRef = usersRef.push();
+  ref.on('value', (snapshot) => {
+    if (snapshot.exists()) {
+        console.log(snapshot.val());
+        
+      } else {
+        console.log("Data doesn't exist at this location.");
+      }
+    console.log("login user list")
+  console.log(snapshot.key);
+}, (errorObject) => {
+  console.log('The read failed: ' + errorObject.name);})
 
-  // Set the user data under the auto-generated ID
-  newUserRef.set({
-    uname: 'u1@uname.edu',
-    psw: 'passu1'
-  });
+  
 }
-// setlogIn()
 
-const checkUser = (users, username, password) => {
-  console.log(users.users, username, password)
-  // users?.users?.map((user) => {
-  for(let userkey in users.users) {
-    // console.log(users.users[userkey])
-    console.log("first", userkey, typeof userkey)
-    if(users.users[userkey].uname == username){
-      if(users.users[userkey].psw == password) return true;
-      else return false;
-    }
-    
-  }
-  return "nouserfound";
-}
+// getData();
+
+
 
 // category/community/postid
 // Usable functions
@@ -595,6 +533,7 @@ const upVote = async(category, community, postId) => {
 exports.upVote = onRequest((request, response) => {
     // const request = request.query.
     // category=Food&community=Issues&postid=-NhJidwG5QV0C8DmGr9B
+    cors(request, response, async () => {
     const category = request.query.category;
     const community = request.query.community;
     const postId = request.query.postid;
@@ -602,4 +541,100 @@ exports.upVote = onRequest((request, response) => {
     upVote(category, community, postId);
 
     response.status(200).json(` UpVote updated ${category}, ${community}, ${postId}`);
+  })
   });
+
+// Login and Signup
+
+  const signup = async(username, password) => {
+
+    const db = getDatabase();
+      const ref = db.ref('posts/login/');
+      // const ref = db.ref(`login/`);
+      // const ref = db.ref(`login/users/`);
+  
+      // console.log(username, password)
+  
+    const usersRef = ref.child('users');
+    // const hopperRef = usersRef.child('gracehop');
+    const newUserRef = usersRef.push();
+  
+    // Set the user data under the auto-generated ID
+    return newUserRef.set({
+      uname: username,
+      psw: password
+    });
+  }
+  
+  // login();
+  // signup("myuser33","mypass333");
+  
+  
+  exports.login = onRequest((request, response) => {
+    // const request = request.query.
+    // category=Food&community=Issues&postid=-NhJidwG5QV0C8DmGr9B
+    cors(request, response, () => {
+    const uname = request.query.uname;
+    const psw = request.query.psw;
+    
+    let isUser = login(uname, psw);
+    if(isUser) {
+      response.status(200).json(`SUCCESS, user details: ${uname}, ${psw}`);
+    }else if(!isUser) {
+      response.status(401).json(`INCORRECT PASSWORD, user details: ${uname}, ${psw}`);
+  
+    }
+    else {
+      response.status(404).json(`NOT FOUND, user details: ${uname}, ${psw}`);
+    }
+  
+    
+  })});
+
+  exports.signup =  onRequest(async (request, response) => {
+    // const request = request.query. 
+    cors(request, response, async () => {
+    const uname = request.query.uname;
+    const psw = request.query.psw;
+  
+    console.log("usersss", uname, psw)
+    
+    let isUser = await signup(uname, psw);
+    
+      response.status(200).json(`SUCCESS, user details: ${uname}, ${psw}`);
+  
+  
+    // 127.0.0.1:5001/msuduhackton/us-central1/signup?uname=SIGN@uname.edu&psw=2233
+  })
+  });
+  
+  const setlogIn = async () => {
+    const db = getDatabase();
+    const ref = db.ref('posts/login/')
+  
+    const usersRef = ref.child('users');
+    // const hopperRef = usersRef.child('gracehop');
+    const newUserRef = usersRef.push();
+  
+    // Set the user data under the auto-generated ID
+    newUserRef.set({
+      uname: 'u1@uname.edu',
+      psw: 'passu1'
+    });
+  }
+  // setlogIn()
+  
+  const checkUser = (users, username, password) => {
+    console.log(users.users, username, password)
+    // users?.users?.map((user) => {
+    for(let userkey in users.users) {
+      // console.log(users.users[userkey])
+      console.log("first", userkey, typeof userkey)
+      if(users.users[userkey].uname == username){
+        if(users.users[userkey].psw == password) return true;
+        else return false;
+      }
+      
+    }
+    return "nouserfound";
+  }
